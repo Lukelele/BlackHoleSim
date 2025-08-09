@@ -1,0 +1,6 @@
+{
+    "code-runner.executorMap": {
+        "cpp": "g++ src/*.cpp glad.c -I dependencies/include dependencies/lib/libglfw.3.3.dylib -o bin/app && ./bin/app"
+    },
+    "cmake.sourceDirectory": "/Users/lukelele/Documents/VSCodeProjects/BlackHoleSim/dependencies/include/glm"
+}
