@@ -1,3 +1,5 @@
+#define PI 3.1415926
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
@@ -5,19 +7,22 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <cmath>
+#include <glm/glm.hpp>
+#include "VertexArray.h"
 
 using namespace std;
+using namespace glm;
 
 
 string vertexShader = R"(
     #version 410
     layout(location=0) in vec3 pos;
-    layout(location=1) in vec3 color;
     out vec4 vertexColor;
     void main()
     {
         gl_Position = vec4(pos, 1);
-        vertexColor = vec4(color, 1);
+        vertexColor = vec4(1, 1, 1, 1);
     }
 )";
 
@@ -31,10 +36,11 @@ string fragmentShader = R"(
     }
 )";
 
+
+
 // Compile and create shader object and returns its id
 GLuint compileShaders(string shader, GLenum type)
 {
-
     const char *shaderCode = shader.c_str();
     GLuint shaderId = glCreateShader(type);
 
@@ -121,8 +127,11 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);  // Required on Mac
 
+    int width = 640;
+    int height = 640;
+
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(width, height, "Hello World", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -138,36 +147,29 @@ int main()
            return -1;
        }
 
-
-    GLfloat vertices[] = {// triangle vertex coordinates
-        -0.5, -0.5, 0,
-        0.5, -0.5, 0,
-        0, 0.5, 0
-    };
-    GLfloat vertexColor[] = {
-        1,0,0,
-        0,1,0,
-        0,0,1
-    };
     
-    GLuint vao;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);  // Crucial for core profile
+    VertexArray circleVA;
 
-    GLuint vertexBuffer;
-    GLuint vertexColorBuffer;
-    // allocate buffer sapce and pass data to it
-    glGenBuffers(1, &vertexBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
-    glEnableVertexAttribArray(0); // Enable this attribute array linked to 'pos'
-    
-    glGenBuffers(1, &vertexColorBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexColorBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertexColor), vertexColor, GL_STATIC_DRAW);
-    glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);
-    glEnableVertexAttribArray(1);
+    int segments = 36;
+    vec3 vertices[segments*3];
+
+    float radius = 0.25;
+    vec3 origin(0,0,0);
+
+    for (int i = 0; i < segments; i++) {
+        float angle = 2 * PI / segments * i;
+        float next_angle = 2 * PI / segments * (i + 1);
+        vec3 p1 = origin + vec3(radius * cos(angle), radius * sin(angle), 0);
+        vec3 p2 = origin + vec3(radius * cos(next_angle), radius * sin(next_angle), 0);
+
+        vertices[i*3] = origin;
+        vertices[i*3+1] = p1;
+        vertices[i*3+2] = p2;
+    }
+
+    VertexBuffer circleVertexBuffer(vertices, sizeof(vertices));
+    circleVA.AddBuffer(circleVertexBuffer, VertexAttribute(0, 3, GL_FLOAT));
+
     
     GLuint vShaderId = compileShaders(vertexShader, GL_VERTEX_SHADER);
     GLuint fShaderId = compileShaders(fragmentShader, GL_FRAGMENT_SHADER);
@@ -187,19 +189,15 @@ int main()
     glUseProgram(programId);
 
 
-
-//    GLuint programID = LoadShaders( "vertexShader.glsl", "fragmentShader.glsl");
-
-
     while (!glfwWindowShouldClose(window))
     {
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0,0,0,1);
 
-//        glUseProgram(programId);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-        
+
+        glDrawArrays(GL_TRIANGLES, 0, 3 * segments);
+
 
         glfwSwapBuffers(window);
         glfwPollEvents();

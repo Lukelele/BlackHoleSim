@@ -3,10 +3,12 @@
 VertexArray::VertexArray()
 {
     glGenVertexArrays(1, &m_RendererID);
+    Bind();
 }
 
 VertexArray::~VertexArray()
 {
+    Unbind();
     glDeleteVertexArrays(1, &m_RendererID);
 }
 
@@ -20,10 +22,10 @@ void VertexArray::Unbind() const
     glBindVertexArray(0);
 }
 
-void VertexArray::AddBuffer(const VertexBuffer& buffer, GLuint index)
+void VertexArray::AddBuffer(VertexBuffer& buffer, VertexAttribute attribute)
 {
     Bind();
     buffer.Bind();
-    glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(index);
+    glVertexAttribPointer(attribute.index, attribute.countsPerVertex, attribute.dataVariableType, attribute.normalised, attribute.stride, attribute.startPointer);
+    glEnableVertexAttribArray(attribute.index);
 }

@@ -2,6 +2,7 @@
 
 #include <glad/glad.h>
 #include "VertexBuffer.h"
+#include "VertexAttribute.h"
 
 
 class VertexArray
@@ -12,8 +13,8 @@ public:
 
     void Bind() const;
     void Unbind() const;
-    void AddBuffer(const VertexBuffer& buffer, GLuint index);
-
+    void AddBuffer(VertexBuffer& buffer, VertexAttribute attribute);
+    
 private:
     GLuint m_RendererID;
 };

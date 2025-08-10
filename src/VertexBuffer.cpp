@@ -1,23 +1,24 @@
 #include "VertexBuffer.h"
 
-VertexBuffer::VertexBuffer(const void* data, unsigned int size)
+VertexBuffer::VertexBuffer(const void* data, unsigned int size, GLenum bufferType)
+    : m_bufferType(bufferType)
 {
-    glGenBuffers(1, &bufferID);
-    glBindBuffer(GL_ARRAY_BUFFER, bufferID);
-    glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+    glGenBuffers(1, &m_bufferID);
+    glBindBuffer(bufferType, m_bufferID);
+    glBufferData(bufferType, size, data, GL_STATIC_DRAW);
 }
 
 VertexBuffer::~VertexBuffer()
 {
-    glDeleteBuffers(1, &bufferID);
+    glDeleteBuffers(1, &m_bufferID);
 }
 
 void VertexBuffer::Bind() const
 {
-    glBindBuffer(GL_ARRAY_BUFFER, bufferID);
+    glBindBuffer(m_bufferType, m_bufferID);
 }
 
 void VertexBuffer::Unbind() const
 {
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(m_bufferType, 0);
 }
