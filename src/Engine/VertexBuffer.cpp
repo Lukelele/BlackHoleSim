@@ -2,7 +2,7 @@
 
 
 VertexBuffer::VertexBuffer(const void* data, unsigned int size, GLenum bufferType)
-    : m_bufferType(bufferType)
+    : m_bufferType(bufferType), m_size(size)
 {
     glGenBuffers(1, &m_bufferID);
     glBindBuffer(bufferType, m_bufferID);

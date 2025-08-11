@@ -7,6 +7,16 @@ VertexArray::VertexArray()
     Bind();
 }
 
+VertexArray::VertexArray(VertexBuffer &buffer, VertexAttribute attribute)
+{
+    glGenVertexArrays(1, &m_RendererID);
+    Bind();
+    buffer.Bind();
+    glVertexAttribPointer(attribute.index, attribute.countsPerVertex, attribute.dataVariableType, attribute.normalised, attribute.stride, attribute.startPointer);
+    glEnableVertexAttribArray(attribute.index);
+    m_vertexCount = buffer.GetSize() / attribute.stride;
+}
+
 VertexArray::~VertexArray()
 {
     Unbind();
@@ -29,4 +39,5 @@ void VertexArray::AddBuffer(VertexBuffer& buffer, VertexAttribute attribute)
     buffer.Bind();
     glVertexAttribPointer(attribute.index, attribute.countsPerVertex, attribute.dataVariableType, attribute.normalised, attribute.stride, attribute.startPointer);
     glEnableVertexAttribArray(attribute.index);
+    m_vertexCount = buffer.GetSize() / attribute.stride;
 }

@@ -12,7 +12,10 @@ public:
     void Bind() const;
     void Unbind() const;
 
+    inline unsigned int GetSize() const { return m_size; }
+
 private:
     GLuint m_bufferID;
     GLenum m_bufferType;
+    unsigned int m_size;
 };

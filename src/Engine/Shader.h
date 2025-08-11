@@ -22,7 +22,6 @@ using glm::vec3;
 using glm::mat4;
 
 
-
 class Shader
 {
 public:
