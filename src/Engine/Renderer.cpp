@@ -13,7 +13,7 @@ Renderer::Renderer(int width, int height)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);  // Required on Mac
 
-    m_window = glfwCreateWindow(width, height, "Hello World", NULL, NULL);
+    m_window = glfwCreateWindow(width, height, "Black Hole", NULL, NULL);
     if (!m_window)
     {
         glfwTerminate();

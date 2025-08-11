@@ -44,13 +44,13 @@ int main()
 
 
     VertexArray va;
-    va.AddBuffer(circleVertexBuffer, VertexAttribute(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0));
+    va.AddBuffer(circleVertexBuffer, VertexAttribute(0, 3, GL_FLOAT, GL_FALSE, 0, 0));
 
 
     // Main Loop
     while (renderer.IsWindowOpen())
     {
-        renderer.StartFrame(vec4(0.05,0.05,0.05,1));
+        renderer.StartFrame(vec4(0.03,0.03,0.03,1));
 
         
         renderer.Draw(shader, va);

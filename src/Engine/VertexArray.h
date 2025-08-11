@@ -15,8 +15,8 @@ public:
     void Unbind() const;
     void AddBuffer(VertexBuffer &buffer, VertexAttribute attribute);
 
-    inline int GetVertexCount() const { return m_vertexCount; }
-    
+    inline unsigned int GetVertexCount() const { return m_vertexCount; }
+
 private:
     GLuint m_RendererID;
     int m_vertexCount;
