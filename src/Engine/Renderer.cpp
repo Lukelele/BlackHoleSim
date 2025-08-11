@@ -46,9 +46,9 @@ void Renderer::EndFrame()
     glfwPollEvents();
 }
 
-void Renderer::Draw(VertexArray &va, Shader &shader)
+void Renderer::Draw(Shader &shader, VertexArray &va, GLenum drawMode)
 {
     shader.Bind();
     va.Bind();
-    glDrawArrays(GL_TRIANGLES, 0, va.GetVertexCount());
+    glDrawArrays(drawMode, 0, va.GetVertexCount());
 }

@@ -9,12 +9,11 @@ class VertexArray
 {
 public:
     VertexArray();
-    VertexArray(VertexBuffer& buffer, VertexAttribute attribute);
     ~VertexArray();
 
     void Bind() const;
     void Unbind() const;
-    void AddBuffer(VertexBuffer& buffer, VertexAttribute attribute);
+    void AddBuffer(VertexBuffer &buffer, VertexAttribute attribute);
 
     inline int GetVertexCount() const { return m_vertexCount; }
     

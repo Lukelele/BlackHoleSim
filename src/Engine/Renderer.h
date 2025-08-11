@@ -15,7 +15,7 @@ public:
 
     void StartFrame(glm::vec4 clearColor = glm::vec4(0, 0, 0, 1));
     void EndFrame();
-    void Draw(VertexArray &va, Shader &shader);
+    void Draw(Shader &shader, VertexArray &va, GLenum drawMode = GL_TRIANGLES);
 
 
     GLFWwindow* GetWindow() const { return m_window; }

@@ -20,11 +20,11 @@ int main()
     Renderer renderer(1080, 1080);
 
 
-    Shader shader("src/Shaders/VertexShader.glsl", "src/Shaders/FragmentShader.glsl");
+    Shader shader("src/Shaders/VertexShader.vert", "src/Shaders/FragmentShader.frag");
 
 
     const int segments = 72;
-    vec3 vertices[segments*3];
+    array<vec3, segments * 3> vertices;
 
     float radius = 0.15;
     vec3 origin(0,0,0);
@@ -40,8 +40,11 @@ int main()
         vertices[i*3+2] = p2;
     }
 
-    VertexBuffer circleVertexBuffer(vertices, sizeof(vertices));
-    VertexArray circleVA(circleVertexBuffer, VertexAttribute(0, 3, GL_FLOAT));
+    VertexBuffer circleVertexBuffer(vertices.data(), sizeof(vertices));
+
+
+    VertexArray va;
+    va.AddBuffer(circleVertexBuffer, VertexAttribute(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0));
 
 
     // Main Loop
@@ -50,9 +53,7 @@ int main()
         renderer.StartFrame(vec4(0.05,0.05,0.05,1));
 
         
-        shader.Bind();
-        circleVA.Bind();
-        glDrawArrays(GL_TRIANGLES, 0, 3 * segments);
+        renderer.Draw(shader, va);
 
 
         renderer.EndFrame();
