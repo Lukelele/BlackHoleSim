@@ -1,5 +1,6 @@
 #include "VertexBuffer.h"
 
+
 VertexBuffer::VertexBuffer(const void* data, unsigned int size, GLenum bufferType)
     : m_bufferType(bufferType)
 {

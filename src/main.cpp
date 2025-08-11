@@ -4,12 +4,11 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <vector>
-#include <fstream>
-#include <sstream>
 #include <string>
 #include <cmath>
 #include <glm/glm.hpp>
-#include "VertexArray.h"
+#include "Engine/VertexArray.h"
+#include "Engine/Shader.h"
 
 using namespace std;
 using namespace glm;
@@ -60,7 +59,7 @@ GLuint compileShaders(string shader, GLenum type)
     glGetShaderiv(shaderId, GL_COMPILE_STATUS, &compileStatus);
 
     if (!compileStatus)
-    { // If compilation was not successfull
+    { // If compilation was not successful
         int length;
         glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &length);
         char *cMessage = new char[length];
@@ -127,8 +126,8 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);  // Required on Mac
 
-    int width = 640;
-    int height = 640;
+    int width = 1080;
+    int height = 1080;
 
     /* Create a windowed mode window and its OpenGL context */
     window = glfwCreateWindow(width, height, "Hello World", NULL, NULL);
@@ -142,15 +141,17 @@ int main()
     glfwMakeContextCurrent(window);
 
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
-       {
-           std::cout << "Failed to initialize OpenGL context" << std::endl;
-           return -1;
-       }
+    {
+        std::cout << "Failed to initialize OpenGL context" << std::endl;
+        return -1;
+    }
+
+    Shader shader("src/Shaders/VertexShader.glsl", "src/Shaders/FragmentShader.glsl");
 
     
     VertexArray circleVA;
 
-    int segments = 36;
+    const int segments = 36;
     vec3 vertices[segments*3];
 
     float radius = 0.25;
@@ -170,24 +171,6 @@ int main()
     VertexBuffer circleVertexBuffer(vertices, sizeof(vertices));
     circleVA.AddBuffer(circleVertexBuffer, VertexAttribute(0, 3, GL_FLOAT));
 
-    
-    GLuint vShaderId = compileShaders(vertexShader, GL_VERTEX_SHADER);
-    GLuint fShaderId = compileShaders(fragmentShader, GL_FRAGMENT_SHADER);
-    
-    if (vShaderId == 0 || fShaderId == 0) {
-        glfwTerminate();
-        return -1;
-    }
-
-    GLuint programId = linkProgram(vShaderId, fShaderId);
-    if (programId == 0) {
-        glfwTerminate();
-        return -1;
-    }
-
-    // Use this program for rendering.
-    glUseProgram(programId);
-
 
     while (!glfwWindowShouldClose(window))
     {
@@ -195,7 +178,9 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0,0,0,1);
 
-
+        
+        shader.Bind();
+        circleVA.Bind();
         glDrawArrays(GL_TRIANGLES, 0, 3 * segments);
 
 
