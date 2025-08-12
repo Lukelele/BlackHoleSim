@@ -2,16 +2,16 @@
 
 #include <vector>
 #include <array>
-#include <cstdint>
-#include <memory>
 #include <glm/glm.hpp>
 
 
 class Mesh {
 public:
     Mesh();
+    Mesh(glm::vec3 vertices[], unsigned int vertexCount);
+    Mesh(std::vector<glm::vec3> vertices);
     ~Mesh();
 
-private:
-    std::vector<glm::vec3> m_Vertices;
+    std::vector<glm::vec3> Vertices;
+    unsigned int VertexCount;
 };

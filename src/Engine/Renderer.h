@@ -6,6 +6,8 @@
 #include "glm/glm.hpp"
 #include "VertexArray.h"
 #include "Shader.h"
+#include "Mesh.h"
+#include "Primitives.h"
 
 
 class Renderer {
