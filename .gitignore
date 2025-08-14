@@ -1,2 +1,3 @@
-.vscode
-app.dSYM
+.vscode/
+app.dSYM/
+.DS_Store
