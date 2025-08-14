@@ -5,6 +5,9 @@
 #include "Mesh.h"
 
 
+using namespace glm;
+
+
 class Object {
 public:
     Object();
@@ -17,7 +20,8 @@ public:
 
 private:
     Mesh* m_mesh;
-    VertexArray m_va;
-    VertexBuffer m_VBO;
     VertexArray m_VAO;
+    VertexBuffer m_VBO;
+
+    glm::vec3 m_position;
 };

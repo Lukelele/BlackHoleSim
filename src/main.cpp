@@ -22,8 +22,7 @@ int main()
     // VertexArray circleVA;
     // circleVA.AddBuffer(circleVertexBuffer, VertexAttribute(0, 3, GL_FLOAT));
 
-    CircleFan *circleMesh = new CircleFan(0.15, vec3(0,0,0));
-    Object circle(circleMesh);
+    Object circle(new CircleFan(0.15, vec3(0,0,0)));
 
 
     // Main Loop
@@ -32,7 +31,7 @@ int main()
         renderer.StartFrame(vec4(0,0,0,1));
 
 
-        // renderer.Draw(shader, circleVA, circle.VertexCount, circle.DrawMode);
+        // renderer.Draw(shader, circleVA, circle.VertexCount, circle.DrawMode);=
         renderer.Draw(shader, circle);
 
 

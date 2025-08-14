@@ -13,7 +13,7 @@ public:
     Mesh(std::vector<glm::vec3> vertices, GLenum drawMode = GL_TRIANGLES);
     virtual ~Mesh();
 
-    std::vector<glm::vec3> Vertices;
+    std::vector<glm::vec3>Vertices;
     unsigned int VertexCount;
     GLenum DrawMode;
 };
