@@ -17,3 +17,22 @@ public:
     glm::vec3 Origin;
     unsigned int Segments;
 };
+
+class CircleFan: public Mesh {
+public:
+    CircleFan(float radius, glm::vec3 origin = glm::vec3(0.0f, 0.0f, 0.0f), unsigned int segments = 90);
+    ~CircleFan();
+
+    float Radius;
+    glm::vec3 Origin;
+    unsigned int Segments;
+};
+
+class LineStrip: public Mesh {
+public:
+    LineStrip(glm::vec3 start, glm::vec3 end);
+    ~LineStrip();
+
+    glm::vec3 Start;
+    glm::vec3 End;
+};
