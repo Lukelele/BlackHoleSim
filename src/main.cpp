@@ -15,12 +15,15 @@ int main()
     Shader shader("src/Shaders/VertexShader.vert", "src/Shaders/FragmentShader.frag");
 
 
-    CircleFan circle(0.15f, glm::vec3(0.0f, 0.0f, 0.0f));
+    // CircleFan circle(0.15f, glm::vec3(0.0f, 0.0f, 0.0f));
 
-    VertexBuffer circleVertexBuffer(circle.Vertices.data(), circle.Vertices.size() * sizeof(glm::vec3));
+    // VertexBuffer circleVertexBuffer(circle.Vertices.data(), circle.Vertices.size() * sizeof(glm::vec3));
 
-    VertexArray circleVA;
-    circleVA.AddBuffer(circleVertexBuffer, VertexAttribute(0, 3, GL_FLOAT));
+    // VertexArray circleVA;
+    // circleVA.AddBuffer(circleVertexBuffer, VertexAttribute(0, 3, GL_FLOAT));
+
+    CircleFan *circleMesh = new CircleFan(0.15, vec3(0,0,0));
+    Object circle(circleMesh);
 
 
     // Main Loop
@@ -29,7 +32,8 @@ int main()
         renderer.StartFrame(vec4(0,0,0,1));
 
 
-        renderer.Draw(shader, circleVA, circle.VertexCount, circle.DrawMode);
+        // renderer.Draw(shader, circleVA, circle.VertexCount, circle.DrawMode);
+        renderer.Draw(shader, circle);
 
 
         renderer.EndFrame();

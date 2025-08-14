@@ -8,6 +8,7 @@
 #include "Shader.h"
 #include "Mesh.h"
 #include "Primitives.h"
+#include "Object.h"
 
 
 class Renderer {
@@ -18,6 +19,7 @@ public:
     void StartFrame(glm::vec4 clearColor = glm::vec4(0, 0, 0, 1));
     void EndFrame();
     void Draw(Shader &shader, VertexArray &va, GLsizei vertexCount, GLenum drawMode = GL_TRIANGLES);
+    void Draw(Shader &shader, Object &object);
 
 
     GLFWwindow* GetWindow() const { return m_window; }

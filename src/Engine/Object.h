@@ -8,15 +8,16 @@
 class Object {
 public:
     Object();
-    Object(glm::vec3 vertices[], unsigned int vertexCount);
-    Object(std::vector<glm::vec3> vertices);
+    Object(Mesh* mesh);
     ~Object();
 
-    std::vector<glm::vec3> GetVertices() const { return m_mesh.Vertices; }
-    unsigned int GetVertexCount() const { return m_mesh.VertexCount; }
+    Mesh* GetMesh() { return m_mesh; }
+    VertexArray &GetVertexArray() { return m_VAO; }
+    VertexBuffer &GetVertexBuffer() { return m_VBO; }
 
 private:
-    Mesh m_mesh;
+    Mesh* m_mesh;
     VertexArray m_va;
-    std::vector<GLuint> m_bufferIDs;
+    VertexBuffer m_VBO;
+    VertexArray m_VAO;
 };

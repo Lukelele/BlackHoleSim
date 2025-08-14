@@ -52,3 +52,10 @@ void Renderer::Draw(Shader &shader, VertexArray &va, GLsizei vertexCount, GLenum
     va.Bind();
     glDrawArrays(drawMode, 0, vertexCount);
 }
+
+void Renderer::Draw(Shader &shader, Object &object)
+{
+    shader.Bind();
+    object.GetVertexArray().Bind();
+    glDrawArrays(object.GetMesh()->DrawMode, 0, object.GetMesh()->VertexCount);
+}

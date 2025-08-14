@@ -1,7 +1,7 @@
 #include "VertexBuffer.h"
 
 
-VertexBuffer::VertexBuffer(const void* data, unsigned int size, GLenum bufferType)
+VertexBuffer::VertexBuffer(const void* data, unsigned int size, GLenum bufferType, GLenum drawUsage)
     : m_bufferType(bufferType), m_size(size)
 {
     glGenBuffers(1, &m_bufferID);

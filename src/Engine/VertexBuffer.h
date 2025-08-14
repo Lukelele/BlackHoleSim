@@ -6,7 +6,7 @@
 class VertexBuffer
 {
 public:
-    VertexBuffer(const void* data, unsigned int size, GLenum bufferType = GL_ARRAY_BUFFER);
+    VertexBuffer(const void* data, unsigned int size, GLenum bufferType = GL_ARRAY_BUFFER, GLenum drawUsage = GL_STATIC_DRAW);
     ~VertexBuffer();
 
     void Bind() const;
