@@ -16,15 +16,11 @@ int main()
 
 
     CircleFan circle(0.15f, glm::vec3(0.0f, 0.0f, 0.0f));
-    LineStrip lineStrip(glm::vec3(-0.5f, 0.0f, 0.0f), glm::vec3(0.5f, 0.0f, 0.0f));
 
     VertexBuffer circleVertexBuffer(circle.Vertices.data(), circle.Vertices.size() * sizeof(glm::vec3));
-    VertexBuffer lineStripVertexBuffer(lineStrip.Vertices.data(), lineStrip.Vertices.size() * sizeof(glm::vec3));
 
     VertexArray circleVA;
-    VertexArray lineVA;
-    circleVA.AddBuffer(circleVertexBuffer, VertexAttribute(0, 3, GL_FLOAT, GL_FALSE, 0, 0));
-    lineVA.AddBuffer(lineStripVertexBuffer, VertexAttribute(0, 3, GL_FLOAT, GL_FALSE, 0, 0));
+    circleVA.AddBuffer(circleVertexBuffer, VertexAttribute(0, 3, GL_FLOAT));
 
 
     // Main Loop
@@ -33,8 +29,7 @@ int main()
         renderer.StartFrame(vec4(0,0,0,1));
 
 
-        renderer.Draw(shader, circleVA, circle.VertexCount, GL_TRIANGLE_FAN);
-        renderer.Draw(shader, lineVA, lineStrip.VertexCount, GL_LINE_STRIP);
+        renderer.Draw(shader, circleVA, circle.VertexCount, circle.DrawMode);
 
 
         renderer.EndFrame();
