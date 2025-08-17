@@ -36,3 +36,9 @@ public:
     glm::vec3 Start;
     glm::vec3 End;
 };
+
+class TriangleStrip: public Mesh {
+public:
+    TriangleStrip(const std::vector<glm::vec3> &vertices);
+    ~TriangleStrip();
+};

@@ -25,6 +25,7 @@ Circle::~Circle()
     VertexCount = 0;
 }
 
+
 CircleFan::CircleFan(float radius, glm::vec3 origin, unsigned int segments)
     : Radius(radius), Origin(origin), Segments(segments), Mesh(GL_TRIANGLE_FAN)
 {
@@ -57,6 +58,20 @@ LineStrip::LineStrip(glm::vec3 start, glm::vec3 end)
 }
 
 LineStrip::~LineStrip()
+{
+    Vertices.clear();
+    VertexCount = 0;
+}
+
+
+TriangleStrip::TriangleStrip(const std::vector<glm::vec3> &vertices)
+    : Mesh(GL_TRIANGLE_STRIP)
+{
+    VertexCount = vertices.size();
+    Vertices = vertices;
+}
+
+TriangleStrip::~TriangleStrip()
 {
     Vertices.clear();
     VertexCount = 0;
