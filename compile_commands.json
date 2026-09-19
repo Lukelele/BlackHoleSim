@@ -1,0 +1,62 @@
+[
+  {
+    "directory": "/Users/lukelele/Documents/VSCodeProjects/BlackHoleSim",
+    "command": "/usr/bin/clang++ -Idependencies/include -Isrc -std=c++17 -c src/main.cpp",
+    "file": "src/main.cpp"
+  },
+  {
+    "directory": "/Users/lukelele/Documents/VSCodeProjects/BlackHoleSim",
+    "command": "/usr/bin/clang++ -Idependencies/include -Isrc -std=c++17 -c src/Core/BlackHole.cpp",
+    "file": "src/Core/BlackHole.cpp"
+  },
+  {
+    "directory": "/Users/lukelele/Documents/VSCodeProjects/BlackHoleSim",
+    "command": "/usr/bin/clang++ -Idependencies/include -Isrc -std=c++17 -c src/Core/Photon.cpp",
+    "file": "src/Core/Photon.cpp"
+  },
+  {
+    "directory": "/Users/lukelele/Documents/VSCodeProjects/BlackHoleSim",
+    "command": "/usr/bin/clang++ -Idependencies/include -Isrc -std=c++17 -c src/Core/Spacetime.cpp",
+    "file": "src/Core/Spacetime.cpp"
+  },
+  {
+    "directory": "/Users/lukelele/Documents/VSCodeProjects/BlackHoleSim",
+    "command": "/usr/bin/clang++ -Idependencies/include -Isrc -std=c++17 -c src/Engine/VertexBuffer.cpp",
+    "file": "src/Engine/VertexBuffer.cpp"
+  },
+  {
+    "directory": "/Users/lukelele/Documents/VSCodeProjects/BlackHoleSim",
+    "command": "/usr/bin/clang++ -Idependencies/include -Isrc -std=c++17 -c src/Engine/Mesh.cpp",
+    "file": "src/Engine/Mesh.cpp"
+  },
+  {
+    "directory": "/Users/lukelele/Documents/VSCodeProjects/BlackHoleSim",
+    "command": "/usr/bin/clang++ -Idependencies/include -Isrc -std=c++17 -c src/Engine/VertexArray.cpp",
+    "file": "src/Engine/VertexArray.cpp"
+  },
+  {
+    "directory": "/Users/lukelele/Documents/VSCodeProjects/BlackHoleSim",
+    "command": "/usr/bin/clang++ -Idependencies/include -Isrc -std=c++17 -c src/Engine/Object.cpp",
+    "file": "src/Engine/Object.cpp"
+  },
+  {
+    "directory": "/Users/lukelele/Documents/VSCodeProjects/BlackHoleSim",
+    "command": "/usr/bin/clang++ -Idependencies/include -Isrc -std=c++17 -c src/Engine/Shader.cpp",
+    "file": "src/Engine/Shader.cpp"
+  },
+  {
+    "directory": "/Users/lukelele/Documents/VSCodeProjects/BlackHoleSim",
+    "command": "/usr/bin/clang++ -Idependencies/include -Isrc -std=c++17 -c src/Engine/Primitives.cpp",
+    "file": "src/Engine/Primitives.cpp"
+  },
+  {
+    "directory": "/Users/lukelele/Documents/VSCodeProjects/BlackHoleSim",
+    "command": "/usr/bin/clang++ -Idependencies/include -Isrc -std=c++17 -c src/Engine/Renderer.cpp",
+    "file": "src/Engine/Renderer.cpp"
+  },
+  {
+    "directory": "/Users/lukelele/Documents/VSCodeProjects/BlackHoleSim",
+    "command": "/usr/bin/clang++ -Idependencies/include -Isrc -std=c++17 -c dependencies/glad.c",
+    "file": "dependencies/glad.c"
+  }
+]

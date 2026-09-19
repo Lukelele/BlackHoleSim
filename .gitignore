@@ -1,3 +1,6 @@
 .vscode/
 bin/app.dSYM/
 *.DS_Store
+**.idx
+*.idx
+.cache/

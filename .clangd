@@ -1,0 +1,5 @@
+CompileFlags:
+  Add:
+    - -Idependencies/include
+    - -Isrc
+    - -std=c++17
