@@ -9,8 +9,32 @@ VertexArray::VertexArray()
 
 VertexArray::~VertexArray()
 {
-    Unbind();
-    glDeleteVertexArrays(1, &m_RendererID);
+    if (m_RendererID)
+    {
+        Unbind();
+        glDeleteVertexArrays(1, &m_RendererID);
+    }
+}
+
+VertexArray::VertexArray(VertexArray&& other) noexcept
+    : m_RendererID(other.m_RendererID)
+{
+    other.m_RendererID = 0;
+}
+
+VertexArray& VertexArray::operator=(VertexArray&& other) noexcept
+{
+    if (this != &other)
+    {
+        if (m_RendererID)
+        {
+            Unbind();
+            glDeleteVertexArrays(1, &m_RendererID);
+        }
+        m_RendererID = other.m_RendererID;
+        other.m_RendererID = 0;
+    }
+    return *this;
 }
 
 void VertexArray::Bind() const

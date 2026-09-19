@@ -13,7 +13,27 @@ Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath) {
 
 Shader::~Shader()
 {
-	glDeleteProgram(programID);
+	if (programID)
+		glDeleteProgram(programID);
+}
+
+Shader::Shader(Shader&& other) noexcept
+	: programID(other.programID), uniformLocations(std::move(other.uniformLocations))
+{
+	other.programID = 0;
+}
+
+Shader& Shader::operator=(Shader&& other) noexcept
+{
+	if (this != &other)
+	{
+		if (programID)
+			glDeleteProgram(programID);
+		programID = other.programID;
+		uniformLocations = std::move(other.uniformLocations);
+		other.programID = 0;
+	}
+	return *this;
 }
 
 void Shader::Bind() {
@@ -27,6 +47,12 @@ void Shader::UnBind() {
 void Shader::AddShadersBySource(const char* vertexShaderSource, const char* fragmentShaderSource) {
 	GLuint vertexShader = compileShader(vertexShaderSource, GL_VERTEX_SHADER);
 	GLuint fragmentShader = compileShader(fragmentShaderSource, GL_FRAGMENT_SHADER);
+
+	if (!vertexShader || !fragmentShader) {
+		if (vertexShader) glDeleteShader(vertexShader);
+		if (fragmentShader) glDeleteShader(fragmentShader);
+		return;
+	}
 
 	glAttachShader(programID, vertexShader);
 	glAttachShader(programID, fragmentShader);
@@ -53,6 +79,12 @@ void Shader::AddShadersByFilepath(const char* vertexShaderPath, const char* frag
 
 	GLuint vertexShader = compileShader(loadShaderSource(vertexShaderPath).c_str(), GL_VERTEX_SHADER);
 	GLuint fragmentShader = compileShader(loadShaderSource(fragmentShaderPath).c_str(), GL_FRAGMENT_SHADER);
+
+	if (!vertexShader || !fragmentShader) {
+		if (vertexShader) glDeleteShader(vertexShader);
+		if (fragmentShader) glDeleteShader(fragmentShader);
+		return;
+	}
 
 	glAttachShader(programID, vertexShader);
 	glAttachShader(programID, fragmentShader);
@@ -99,6 +131,10 @@ GLuint Shader::compileShader(const char* shaderSource, GLenum shaderType) {
 
 string Shader::loadShaderSource(const char* filepath) {
 	ifstream file(filepath);
+	if (!file.is_open()) {
+		cout << "Failed to open shader file: " << filepath << endl;
+		return "";
+	}
 	string source((istreambuf_iterator<char>(file)), (istreambuf_iterator<char>()));
 
 	return source;
@@ -151,13 +187,16 @@ void Shader::SendUniform(const char* uniformName, mat4 &matrix4) {
 }
 
 
-GLuint Shader::getUniformLocation(GLuint programID, const char* uniformName) {
-	if (uniformLocations[uniformName] == 0) {
-		uniformLocations[uniformName] = glGetUniformLocation(programID, uniformName);
-		if (uniformLocations[uniformName] == -1) {
-			cout << "Uniform: " << uniformName << " Not Found." << endl;
-		}
+GLint Shader::getUniformLocation(GLuint programID, const char* uniformName) {
+	auto it = uniformLocations.find(uniformName);
+	if (it != uniformLocations.end()) {
+		return it->second;
 	}
 
-	return uniformLocations[uniformName];
+	GLint location = glGetUniformLocation(programID, uniformName);
+	if (location == -1) {
+		cout << "Uniform: " << uniformName << " Not Found." << endl;
+	}
+	uniformLocations[uniformName] = location;
+	return location;
 }

@@ -24,8 +24,8 @@ public:
 
     GLFWwindow* GetWindow() const { return m_window; }
     void SetWindow(GLFWwindow* window) { m_window = window; }
-    bool IsWindowOpen() const { return !glfwWindowShouldClose(m_window); }
+    bool IsWindowOpen() const { return m_window && !glfwWindowShouldClose(m_window); }
 
 private:
-    GLFWwindow* m_window;
+    GLFWwindow* m_window = nullptr;
 };

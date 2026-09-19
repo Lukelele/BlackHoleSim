@@ -2,6 +2,7 @@
 
 
 Renderer::Renderer(int width, int height)
+    : m_window(nullptr)
 {
     if (!glfwInit()) {
         std::cout << "GLFW not initialised." << std::endl;
@@ -25,23 +26,37 @@ Renderer::Renderer(int width, int height)
 
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
         std::cout << "Failed to initialize OpenGL context" << std::endl;
+        glfwDestroyWindow(m_window);
+        m_window = nullptr;
+        glfwTerminate();
         return;
     }
+
+    int fbWidth, fbHeight;
+    glfwGetFramebufferSize(m_window, &fbWidth, &fbHeight);
+    glViewport(0, 0, fbWidth, fbHeight);
 }
 
 Renderer::~Renderer()
 {
+    if (m_window)
+    {
+        glfwDestroyWindow(m_window);
+        m_window = nullptr;
+    }
     glfwTerminate();
 }
 
 void Renderer::StartFrame(glm::vec4 clearColor)
 {
+    if (!m_window) return;
     glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void Renderer::EndFrame()
 {
+    if (!m_window) return;
     glfwSwapBuffers(m_window);
     glfwPollEvents();
 }

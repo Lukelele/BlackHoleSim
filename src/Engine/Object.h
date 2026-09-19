@@ -10,9 +10,13 @@ using namespace glm;
 
 class Object {
 public:
-    Object();
     Object(Mesh* mesh);
     ~Object();
+
+    Object(const Object&) = delete;
+    Object& operator=(const Object&) = delete;
+    Object(Object&& other) noexcept;
+    Object& operator=(Object&& other) noexcept;
 
     Mesh* GetMesh() { return m_mesh; }
     VertexArray &GetVertexArray() { return m_VAO; }
@@ -20,8 +24,8 @@ public:
 
 private:
     Mesh* m_mesh;
-    VertexArray m_VAO;
     VertexBuffer m_VBO;
+    VertexArray m_VAO;
 
     glm::vec3 m_position;
 };

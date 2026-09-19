@@ -29,6 +29,11 @@ public:
 	Shader(const char* vertexShaderPath, const char* fragmentShaderPath);
 	~Shader();
 
+	Shader(const Shader&) = delete;
+	Shader& operator=(const Shader&) = delete;
+	Shader(Shader&& other) noexcept;
+	Shader& operator=(Shader&& other) noexcept;
+
 	void Bind();
 	void UnBind();
 
@@ -48,7 +53,7 @@ private:
 	GLuint programID;
 	GLuint compileShader(const char* shaderSource, GLenum shaderType);
 	string loadShaderSource(const char* filepath);
-	GLuint getUniformLocation(GLuint programID, const char* uniformName);
+	GLint getUniformLocation(GLuint programID, const char* uniformName);
 
 	unordered_map<string, GLint> uniformLocations;
 };

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <glad/glad.h>
 
 
 struct VertexAttribute
@@ -9,7 +10,7 @@ struct VertexAttribute
 		: Index(index), CountPerVertex(countPerVertex), DataType(dataType), Normalised(normalised), Stride(stride), StartPointer((void*)startPointer)
 	{
 	}
-	VertexAttribute();
+	VertexAttribute() = default;
 
 	unsigned int Index;
 	unsigned int CountPerVertex;
