@@ -1,11 +1,9 @@
 #include "Engine/Renderer.h"
 
 #include <algorithm>
+#include <iostream>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
-#include <iomanip>
-#include <iostream>
-#include <string>
 
 #include "Core/BlackHole.h"
 #include "Core/Spacetime.h"
@@ -172,6 +170,10 @@ int main() {
   float starfieldBrightness = 0.8f;
   float exposure = 1.25f;
 
+  // Cached OpenGL hardware information
+  const char* glVersionStr = reinterpret_cast<const char*>(glGetString(GL_VERSION));
+  const char* glRendererStr = reinterpret_cast<const char*>(glGetString(GL_RENDERER));
+
   // Simulation time
   float simTime = 0.0f;
 
@@ -183,17 +185,17 @@ int main() {
     ImGuiIO &io = ImGui::GetIO();
     if (!io.WantCaptureKeyboard) {
       if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        g_Camera.ProcessKeyboard(0, dt);
+        g_Camera.ProcessKeyboard(CameraDirection::FORWARD, dt);
       if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        g_Camera.ProcessKeyboard(1, dt);
+        g_Camera.ProcessKeyboard(CameraDirection::BACKWARD, dt);
       if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        g_Camera.ProcessKeyboard(2, dt);
+        g_Camera.ProcessKeyboard(CameraDirection::LEFT, dt);
       if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        g_Camera.ProcessKeyboard(3, dt);
+        g_Camera.ProcessKeyboard(CameraDirection::RIGHT, dt);
       if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-        g_Camera.ProcessKeyboard(4, dt);
+        g_Camera.ProcessKeyboard(CameraDirection::UP, dt);
       if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-        g_Camera.ProcessKeyboard(5, dt);
+        g_Camera.ProcessKeyboard(CameraDirection::DOWN, dt);
 
       static bool s_mKeyPressed = false;
       if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS) {
@@ -470,8 +472,8 @@ int main() {
           ImGui::Text("UI/Display Res: %dx%d (Native)",
                       renderer.GetFramebufferWidth(),
                       renderer.GetFramebufferHeight());
-          ImGui::Text("OpenGL: %s", glGetString(GL_VERSION));
-          ImGui::Text("GPU: %s", glGetString(GL_RENDERER));
+          ImGui::Text("OpenGL: %s", glVersionStr ? glVersionStr : "Unknown");
+          ImGui::Text("GPU: %s", glRendererStr ? glRendererStr : "Unknown");
           ImGui::Separator();
           ImGui::Text("Controls:");
           ImGui::BulletText("Left Drag: Orbit Camera");

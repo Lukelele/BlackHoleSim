@@ -18,5 +18,4 @@ Mesh::Mesh(std::vector<glm::vec3> vertices, GLenum drawMode)
 
 Mesh::~Mesh()
 {
-    Vertices.clear();
 }

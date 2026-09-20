@@ -11,6 +11,15 @@ enum class CameraPreset {
     PHOTON_RING_CLOSEUP
 };
 
+enum class CameraDirection {
+    FORWARD,
+    BACKWARD,
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN
+};
+
 class Camera {
 public:
     Camera(glm::vec3 target = glm::vec3(0.0f), float distance = 15.0f, float yaw = 0.0f, float pitch = 15.0f);
@@ -20,7 +29,8 @@ public:
     void ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
     void ProcessMousePan(float xoffset, float yoffset);
     void ProcessMouseScroll(float yoffset);
-    void ProcessKeyboard(int direction, float deltaTime); // 0=Forward, 1=Back, 2=Left, 3=Right, 4=Up, 5=Down
+    void ProcessKeyboard(CameraDirection direction, float deltaTime);
+    void ProcessKeyboard(int direction, float deltaTime); // Backwards compatibility
 
     // Set preset view
     void SetPreset(CameraPreset preset);

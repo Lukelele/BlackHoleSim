@@ -21,8 +21,6 @@ Circle::Circle(float radius, glm::vec3 origin, unsigned int segments)
 
 Circle::~Circle()
 {
-    Vertices.clear();
-    VertexCount = 0;
 }
 
 
@@ -43,8 +41,6 @@ CircleFan::CircleFan(float radius, glm::vec3 origin, unsigned int segments)
 
 CircleFan::~CircleFan()
 {
-    Vertices.clear();
-    VertexCount = 0;
 }
 
 
@@ -59,8 +55,6 @@ LineStrip::LineStrip(glm::vec3 start, glm::vec3 end)
 
 LineStrip::~LineStrip()
 {
-    Vertices.clear();
-    VertexCount = 0;
 }
 
 
@@ -73,6 +67,4 @@ TriangleStrip::TriangleStrip(const std::vector<glm::vec3> &vertices)
 
 TriangleStrip::~TriangleStrip()
 {
-    Vertices.clear();
-    VertexCount = 0;
 }

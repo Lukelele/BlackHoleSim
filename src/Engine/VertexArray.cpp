@@ -11,7 +11,6 @@ VertexArray::~VertexArray()
 {
     if (m_RendererID)
     {
-        Unbind();
         glDeleteVertexArrays(1, &m_RendererID);
     }
 }

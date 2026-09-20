@@ -52,8 +52,14 @@ public:
     // Innermost Stable Circular Orbit (ISCO): 6M for Schwarzschild
     float GetISCORadius() const;
 
-    // Critical impact parameter for capture: b_c = 3*sqrt(3)*M for Schwarzschild
-    float GetCriticalImpactParameter() const;
+    // Critical impact parameter for equatorial photon capture:
+    // Exactly 3*sqrt(3)*M for Schwarzschild, splits into prograde and retrograde for Kerr
+    float GetCriticalImpactParameter() const { return m_criticalImpactParameter; }
+    float GetCriticalImpactParameterPrograde() const { return m_criticalImpactParameter; }
+    float GetCriticalImpactParameterRetrograde() const;
+
+    // Ergosphere equatorial radius is always 2M
+    float GetEquatorialErgosphereRadius() const { return 2.0f * m_mass; }
 
     // Accretion disk defaults
     float GetDiskInnerRadius() const { return GetISCORadius(); }
@@ -73,4 +79,5 @@ private:
     float m_eventHorizonRadius;
     float m_photonSphereRadius;
     float m_iscoRadius;
+    float m_criticalImpactParameter;
 };

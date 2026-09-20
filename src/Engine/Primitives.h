@@ -5,8 +5,7 @@
 #include "Mesh.h"
 #include "glm/glm.hpp"
 
-#define PI 3.14159265359f
-
+constexpr float PI = 3.14159265359f;
 
 class Circle: public Mesh {
 public:

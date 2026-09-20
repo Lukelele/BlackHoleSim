@@ -11,7 +11,7 @@ enum class PhotonStatus {
 
 class Photon {
 public:
-    Photon(glm::vec3 position = glm::vec3(0.0f), glm::vec3 velocity = glm::vec3(0.0f, 0.0f, -1.0f));
+    Photon(glm::vec3 position = glm::vec3(0.0f), glm::vec3 velocity = glm::vec3(0.0f, 0.0f, -1.0f), bool recordTrajectory = true);
     ~Photon() = default;
 
     // State getters and setters
@@ -43,6 +43,8 @@ public:
 
     // Trajectory recording for debugging / CPU rendering
     const std::vector<glm::vec3>& GetTrajectory() const { return m_trajectory; }
+    bool GetRecordTrajectory() const { return m_recordTrajectory; }
+    void SetRecordTrajectory(bool record) { m_recordTrajectory = record; }
     void RecordPosition() { m_trajectory.push_back(m_position); }
     void ClearTrajectory() { m_trajectory.clear(); }
 
@@ -57,4 +59,5 @@ private:
     PhotonStatus m_status = PhotonStatus::IN_FLIGHT;
 
     std::vector<glm::vec3> m_trajectory;
+    bool m_recordTrajectory = true;
 };

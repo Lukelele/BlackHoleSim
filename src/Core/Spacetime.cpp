@@ -98,8 +98,8 @@ PhotonStatus Spacetime::TracePhoton(Photon& photon, float maxDistance, int maxSt
 
     photon.SetPosition(pos);
     photon.SetVelocity(vel);
-    photon.SetStatus(PhotonStatus::ESCAPED_INFINITY);
-    return PhotonStatus::ESCAPED_INFINITY;
+    photon.SetStatus(PhotonStatus::IN_FLIGHT);
+    return PhotonStatus::IN_FLIGHT;
 }
 
 float Spacetime::AnalyticalWeakFieldDeflection(float impactParameter) const {

@@ -12,10 +12,10 @@ struct VertexAttribute
 	}
 	VertexAttribute() = default;
 
-	unsigned int Index;
-	unsigned int CountPerVertex;
-	unsigned int DataType;
-	bool Normalised;
-	int Stride;
-	void* StartPointer;
+	unsigned int Index = 0;
+	unsigned int CountPerVertex = 0;
+	unsigned int DataType = GL_FLOAT;
+	bool Normalised = false;
+	int Stride = 0;
+	void* StartPointer = nullptr;
 };

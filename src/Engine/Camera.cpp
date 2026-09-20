@@ -42,22 +42,35 @@ void Camera::ProcessMouseScroll(float yoffset) {
     UpdateCameraVectors();
 }
 
-void Camera::ProcessKeyboard(int direction, float deltaTime) {
+void Camera::ProcessKeyboard(CameraDirection direction, float deltaTime) {
     float velocity = m_moveSpeed * deltaTime;
-    if (direction == 0) // Forward
-        m_distance = std::clamp(m_distance - velocity, 3.5f, 100.0f);
-    if (direction == 1) // Backward
-        m_distance = std::clamp(m_distance + velocity, 3.5f, 100.0f);
-    if (direction == 2) // Left
-        m_yaw -= velocity * 5.0f;
-    if (direction == 3) // Right
-        m_yaw += velocity * 5.0f;
-    if (direction == 4) // Up
-        m_pitch = std::clamp(m_pitch + velocity * 5.0f, -89.0f, 89.0f);
-    if (direction == 5) // Down
-        m_pitch = std::clamp(m_pitch - velocity * 5.0f, -89.0f, 89.0f);
-
+    switch (direction) {
+        case CameraDirection::FORWARD:
+            m_distance = std::clamp(m_distance - velocity, 3.5f, 100.0f);
+            break;
+        case CameraDirection::BACKWARD:
+            m_distance = std::clamp(m_distance + velocity, 3.5f, 100.0f);
+            break;
+        case CameraDirection::LEFT:
+            m_yaw -= velocity * 5.0f;
+            break;
+        case CameraDirection::RIGHT:
+            m_yaw += velocity * 5.0f;
+            break;
+        case CameraDirection::UP:
+            m_pitch = std::clamp(m_pitch + velocity * 5.0f, -89.0f, 89.0f);
+            break;
+        case CameraDirection::DOWN:
+            m_pitch = std::clamp(m_pitch - velocity * 5.0f, -89.0f, 89.0f);
+            break;
+    }
     UpdateCameraVectors();
+}
+
+void Camera::ProcessKeyboard(int direction, float deltaTime) {
+    if (direction >= 0 && direction <= 5) {
+        ProcessKeyboard(static_cast<CameraDirection>(direction), deltaTime);
+    }
 }
 
 void Camera::SetPreset(CameraPreset preset) {

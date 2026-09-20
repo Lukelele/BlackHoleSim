@@ -201,10 +201,11 @@ vec3 ComputeGargantuaEmission(vec3 p, vec3 vel, out float outDensity, out float 
     float ring3 = sin(r * 115.0) * 0.5 + 0.5;
     float striations = 0.52 + 0.28 * ring1 + 0.15 * ring2 + 0.05 * ring3;
 
-    // Keplerian orbital differential shear angle
-    float omega = sqrt(u_Mass / (r * r * r));
+    // Kerr Relativistic Keplerian orbital differential shear angle
+    float rSqrt = sqrt(r);
+    float omegaKerr = sqrt(u_Mass) / max(0.0001, (r * rSqrt + a * u_Mass * sqrt(u_Mass)));
     float phi = atan(diskPlanePos.z, diskPlanePos.x);
-    float shearedAngle = phi - omega * u_Time * 1.4;
+    float shearedAngle = phi - omegaKerr * u_Time * 1.4;
 
     // Fast analytical logarithmic spiral density waves (Lindblad resonance spirals)
     float logR = log(r / u_DiskInnerRadius + 0.05);
@@ -222,8 +223,8 @@ vec3 ComputeGargantuaEmission(vec3 p, vec3 vel, out float outDensity, out float 
         return vec3(0.0);
     }
 
-    // Keplerian orbital velocity v = sqrt(M / r)
-    float vOrb = min(0.96, sqrt(u_Mass / r));
+    // Kerr Relativistic Keplerian orbital velocity
+    float vOrb = min(0.96, omegaKerr * r);
     vec3 tangent = normalize(cross(spinAxis, diskPlanePos));
     vec3 beta = tangent * vOrb;
 
@@ -238,10 +239,12 @@ vec3 ComputeGargantuaEmission(vec3 p, vec3 vel, out float outDensity, out float 
         doppler = clamp(doppler, 0.22, 5.0);
     }
 
-    // Gravitational redshift
+    // Gravitational redshift:
+    // For Schwarzschild (a=0): rH = 2M -> sqrt(1 - 2M/r)
+    // For Kerr (a!=0): horizon is rH -> smoothly goes to zero at rH
     float gravRedshift = 1.0;
     if (u_EnableRedshift) {
-        gravRedshift = sqrt(max(0.0, 1.0 - (2.0 * u_Mass) / r));
+        gravRedshift = sqrt(clamp((r - rH) / r, 0.0, 1.0));
     }
 
     float totalShift = doppler * gravRedshift;

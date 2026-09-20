@@ -4,9 +4,7 @@
 #include "VertexArray.h"
 #include "Mesh.h"
 
-
-using namespace glm;
-
+#include <glm/glm.hpp>
 
 class Object {
 public:

@@ -70,11 +70,18 @@ float BlackHole::GetISCORadius() const {
     return m_iscoRadius;
 }
 
-float BlackHole::GetCriticalImpactParameter() const {
-    // For Schwarzschild (spin = 0): b_c = 3 * sqrt(3) * M
-    // For Kerr equatorial prograde: decreases with spin
+float BlackHole::GetCriticalImpactParameterRetrograde() const {
     float a = std::abs(m_spin);
-    return m_mass * (3.0f * std::sqrt(3.0f) - a * 1.5f);
+    if (a < 1e-5f) {
+        return 3.0f * std::sqrt(3.0f) * m_mass;
+    }
+    // Retrograde equatorial photon sphere
+    float psi = std::acos(std::clamp(a, -1.0f, 1.0f));
+    float rPhRetro = 2.0f * m_mass * (1.0f + std::cos(2.0f / 3.0f * psi));
+    float aM = a * m_mass;
+    float delta = rPhRetro * rPhRetro - 2.0f * m_mass * rPhRetro + aM * aM;
+    float sqrtDelta = std::sqrt(std::max(0.0f, delta));
+    return (rPhRetro * rPhRetro + aM * aM - aM * sqrtDelta) / std::max(0.0001f, sqrtDelta - aM);
 }
 
 void BlackHole::UpdateParameters() {
@@ -88,6 +95,17 @@ void BlackHole::UpdateParameters() {
     // Prograde orbit
     float psi = std::acos(std::clamp(-a, -1.0f, 1.0f));
     m_photonSphereRadius = 2.0f * m_mass * (1.0f + std::cos(2.0f / 3.0f * psi));
+
+    // Exact Kerr critical impact parameter for prograde equatorial null geodesics:
+    if (std::abs(a) < 1e-5f) {
+        m_criticalImpactParameter = 3.0f * std::sqrt(3.0f) * m_mass;
+    } else {
+        float rPh = m_photonSphereRadius;
+        float aM = std::abs(a) * m_mass;
+        float delta = rPh * rPh - 2.0f * m_mass * rPh + aM * aM;
+        float sqrtDelta = std::sqrt(std::max(0.0f, delta));
+        m_criticalImpactParameter = (rPh * rPh + aM * aM + aM * sqrtDelta) / std::max(0.0001f, aM + sqrtDelta);
+    }
 
     // Bardeen, Press, Teukolsky (1972) ISCO formula:
     float sign = (a >= 0.0f) ? 1.0f : -1.0f;
