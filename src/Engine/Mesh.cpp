@@ -2,7 +2,7 @@
 
 
 Mesh::Mesh(GLenum drawMode)
-    : VertexCount(0), Vertices(), DrawMode(drawMode)
+    : Vertices(), VertexCount(0), DrawMode(drawMode)
 {
 }
 

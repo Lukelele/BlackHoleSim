@@ -5,7 +5,9 @@ BlackHole::BlackHole(float mass, float spin, glm::vec3 origin)
     : m_mass(std::max(0.001f, mass)),
       m_spin(std::clamp(spin, -0.998f, 0.998f)),
       m_origin(origin),
-      m_spinAxis(glm::vec3(0.0f, 1.0f, 0.0f))
+      m_spinAxis(glm::vec3(0.0f, 1.0f, 0.0f)),
+      m_metric(std::abs(spin) < 0.0001f ? BlackHoleMetric::SCHWARZSCHILD : BlackHoleMetric::KERR),
+      m_savedKerrSpin(std::abs(spin) < 0.0001f ? 0.75f : std::clamp(spin, -0.998f, 0.998f))
 {
     UpdateParameters();
 }
@@ -20,6 +22,32 @@ void BlackHole::SetMass(float mass) {
 
 void BlackHole::SetSpin(float spin) {
     m_spin = std::clamp(spin, -0.998f, 0.998f);
+    if (std::abs(m_spin) > 0.0001f) {
+        m_savedKerrSpin = m_spin;
+        m_metric = BlackHoleMetric::KERR;
+    } else {
+        m_metric = BlackHoleMetric::SCHWARZSCHILD;
+    }
+    UpdateParameters();
+}
+
+void BlackHole::SetSchwarzschild(bool isSchwarzschild) {
+    SetMetric(isSchwarzschild ? BlackHoleMetric::SCHWARZSCHILD : BlackHoleMetric::KERR);
+}
+
+void BlackHole::SetMetric(BlackHoleMetric metric) {
+    m_metric = metric;
+    if (m_metric == BlackHoleMetric::SCHWARZSCHILD) {
+        if (std::abs(m_spin) > 0.0001f) {
+            m_savedKerrSpin = m_spin;
+        }
+        m_spin = 0.0f;
+    } else {
+        if (std::abs(m_savedKerrSpin) < 0.0001f) {
+            m_savedKerrSpin = 0.75f;
+        }
+        m_spin = m_savedKerrSpin;
+    }
     UpdateParameters();
 }
 

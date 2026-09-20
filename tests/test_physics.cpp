@@ -109,6 +109,35 @@ int main() {
     std::cout << "  Doppler factor: " << dopplerApproaching << std::endl;
     std::cout << "  -> PASSED!\n" << std::endl;
 
+    // 7. Schwarzschild Toggle and State Preservation
+    std::cout << "[Test 7] Schwarzschild Black Hole Toggle & State Preservation:" << std::endl;
+    BlackHole toggleBH(1.0f, 0.85f);
+    assert(!toggleBH.IsSchwarzschild());
+    assert(std::abs(toggleBH.GetSpin() - 0.85f) < 1e-4);
+    assert(toggleBH.GetISCORadius() < 6.0f); // Kerr ISCO is contracted
+
+    // Toggle to Schwarzschild
+    toggleBH.SetSchwarzschild(true);
+    assert(toggleBH.IsSchwarzschild());
+    assert(std::abs(toggleBH.GetSpin()) < 1e-5);
+    assert(std::abs(toggleBH.GetSchwarzschildRadius() - 2.0f) < 1e-4);
+    assert(std::abs(toggleBH.GetEventHorizonRadius() - 2.0f) < 1e-4);
+    assert(std::abs(toggleBH.GetPhotonSphereRadius() - 3.0f) < 1e-4);
+    assert(std::abs(toggleBH.GetISCORadius() - 6.0f) < 1e-4);
+    std::cout << "  Toggled to Schwarzschild: spin = " << toggleBH.GetSpin()
+              << ", r_H = " << toggleBH.GetEventHorizonRadius()
+              << ", r_ISCO = " << toggleBH.GetISCORadius() << std::endl;
+
+    // Toggle back to Kerr - must restore previous spin
+    toggleBH.SetSchwarzschild(false);
+    assert(!toggleBH.IsSchwarzschild());
+    assert(std::abs(toggleBH.GetSpin() - 0.85f) < 1e-4);
+    assert(toggleBH.GetISCORadius() < 6.0f);
+    std::cout << "  Toggled back to Kerr: spin restored = " << toggleBH.GetSpin()
+              << ", r_H = " << toggleBH.GetEventHorizonRadius()
+              << ", r_ISCO = " << toggleBH.GetISCORadius() << std::endl;
+    std::cout << "  -> PASSED!\n" << std::endl;
+
     std::cout << "ALL GENERAL RELATIVITY PHYSICS TESTS PASSED PERFECTLY!\n";
     return 0;
 }

@@ -1,12 +1,15 @@
+#include "Engine/Renderer.h"
+
 #include <algorithm>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
+#include <iomanip>
 #include <iostream>
+#include <string>
 
 #include "Core/BlackHole.h"
 #include "Core/Spacetime.h"
 #include "Engine/Camera.h"
-#include "Engine/Renderer.h"
 #include "Engine/Shader.h"
 
 #define DEFAULT_WIDTH 1280
@@ -191,6 +194,16 @@ int main() {
         g_Camera.ProcessKeyboard(4, dt);
       if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
         g_Camera.ProcessKeyboard(5, dt);
+
+      static bool s_mKeyPressed = false;
+      if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS) {
+        if (!s_mKeyPressed) {
+          blackHole.SetSchwarzschild(!blackHole.IsSchwarzschild());
+          s_mKeyPressed = true;
+        }
+      } else {
+        s_mKeyPressed = false;
+      }
     }
 
     if (!g_PauseAnimation) {
@@ -266,60 +279,61 @@ int main() {
                            "Einstein Geodesic Ray Tracer");
         ImGui::TextDisabled("Press [Tab] or [H] to hide/show UI");
 
-        ImGui::PushStyleColor(ImGuiCol_Button,
-                              ImVec4(0.55f, 0.35f, 0.12f, 0.85f));
-        ImGui::PushStyleColor(ImGuiCol_ButtonHovered,
-                              ImVec4(0.75f, 0.48f, 0.18f, 0.95f));
-        ImGui::PushStyleColor(ImGuiCol_ButtonActive,
-                              ImVec4(0.90f, 0.58f, 0.22f, 1.0f));
-        if (ImGui::Button("Apply Interstellar Gargantua Preset",
-                          ImVec2(-1, 28))) {
-          blackHole.SetMass(1.0f);
-          blackHole.SetSpin(0.85f);
-          g_Camera.SetPreset(CameraPreset::CINEMATIC_EDGE_ON);
-          g_Camera.SetFOV(48.0f);
-          enableDisk = true;
-          lockToISCO = true;
-          diskOuterRadius = 18.5f;
-          diskBrightness = 1.35f;
-          diskTemperature = 9500.0f;
-          diskScaleHeight = 0.055f;
-          diskRotationSpeed = 0.85f;
-          diskTiltPitch = 0.0f;
-          diskTiltYaw = 0.0f;
-          enableDoppler = true;
-          enableRedshift = true;
-          exposure = 1.25f;
-          starfieldBrightness = 0.75f;
-          stepFactor = 1.0f;
-          maxSteps = 240;
-        }
-        ImGui::PopStyleColor(3);
-
         ImGui::Separator();
 
         // 1. Black Hole Spacetime Section
         if (ImGui::CollapsingHeader("Spacetime & Black Hole",
                                     ImGuiTreeNodeFlags_DefaultOpen)) {
+          ImGui::TextColored(ImVec4(0.4f, 0.85f, 1.0f, 1.0f), "Metric Geometry:");
+          bool isSchwarzschild = blackHole.IsSchwarzschild();
+          if (ImGui::RadioButton("Schwarzschild (Static)", isSchwarzschild)) {
+            blackHole.SetSchwarzschild(true);
+          }
+          ImGui::SameLine();
+          if (ImGui::RadioButton("Kerr (Rotating)", !isSchwarzschild)) {
+            blackHole.SetSchwarzschild(false);
+          }
+
+          ImGui::Spacing();
+
           float mass = blackHole.GetMass();
           if (ImGui::SliderFloat("Mass (M)", &mass, 0.2f, 4.0f, "%.2f")) {
             blackHole.SetMass(mass);
           }
 
-          float spin = blackHole.GetSpin();
-          if (ImGui::SliderFloat("Kerr Spin (a)", &spin, -0.998f, 0.998f,
-                                 "%.3f")) {
-            blackHole.SetSpin(spin);
+          if (blackHole.IsSchwarzschild()) {
+            ImGui::BeginDisabled();
+            float zeroSpin = 0.0f;
+            ImGui::SliderFloat("Kerr Spin (a)", &zeroSpin, -0.998f, 0.998f, "0.000 (Schwarzschild)");
+            ImGui::EndDisabled();
+            ImGui::TextDisabled("Spin is locked to 0 for Schwarzschild spacetime.");
+          } else {
+            float spin = blackHole.GetSpin();
+            if (ImGui::SliderFloat("Kerr Spin (a)", &spin, -0.998f, 0.998f,
+                                   "%.3f")) {
+              blackHole.SetSpin(spin);
+            }
           }
 
-          ImGui::Text("Relativistic Horizons (G = c = 1):");
-          ImGui::BulletText("Event Horizon (r_H): %.2f M",
-                            blackHole.GetEventHorizonRadius());
-          ImGui::BulletText("Photon Sphere (r_ph): %.2f M",
-                            blackHole.GetPhotonSphereRadius());
-          ImGui::BulletText("ISCO Radius: %.2f M", blackHole.GetISCORadius());
-          ImGui::BulletText("Shadow Capture (b_c): %.2f M",
-                            blackHole.GetCriticalImpactParameter());
+          if (blackHole.IsSchwarzschild()) {
+            ImGui::TextColored(ImVec4(0.7f, 0.9f, 1.0f, 1.0f), "Relativistic Horizons (Schwarzschild r_s = 2M):");
+            ImGui::BulletText("Event Horizon (r_s): %.2f M  (Exact 2M)",
+                              blackHole.GetEventHorizonRadius());
+            ImGui::BulletText("Photon Sphere (r_ph): %.2f M  (Exact 3M)",
+                              blackHole.GetPhotonSphereRadius());
+            ImGui::BulletText("ISCO Radius: %.2f M  (Exact 6M)", blackHole.GetISCORadius());
+            ImGui::BulletText("Shadow Capture (b_c): %.2f M  (Exact 3*sqrt(3)*M)",
+                              blackHole.GetCriticalImpactParameter());
+          } else {
+            ImGui::TextColored(ImVec4(1.0f, 0.85f, 0.5f, 1.0f), "Relativistic Horizons (Kerr a = %.3f):", blackHole.GetSpin());
+            ImGui::BulletText("Event Horizon (r_H): %.2f M",
+                              blackHole.GetEventHorizonRadius());
+            ImGui::BulletText("Photon Sphere (r_ph): %.2f M",
+                              blackHole.GetPhotonSphereRadius());
+            ImGui::BulletText("ISCO Radius: %.2f M", blackHole.GetISCORadius());
+            ImGui::BulletText("Shadow Capture (b_c): %.2f M",
+                              blackHole.GetCriticalImpactParameter());
+          }
 
           ImGui::Spacing();
           ImGui::SliderFloat("Axis Pitch", &diskTiltPitch, -45.0f, 45.0f,
@@ -464,6 +478,7 @@ int main() {
           ImGui::BulletText("Right Drag: Pan Target");
           ImGui::BulletText("Scroll: Zoom");
           ImGui::BulletText("WASD / QE: Fly");
+          ImGui::BulletText("M: Toggle Schwarzschild / Kerr Metric");
           ImGui::BulletText("Space: Pause Disk Animation");
         }
       }

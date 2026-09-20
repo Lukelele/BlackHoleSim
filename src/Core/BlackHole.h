@@ -3,6 +3,11 @@
 #include <glm/glm.hpp>
 #include <cmath>
 
+enum class BlackHoleMetric {
+    SCHWARZSCHILD,
+    KERR
+};
+
 class BlackHole {
 public:
     // mass M, spin a in [-0.998, 0.998] (in geometric units G=c=1)
@@ -15,6 +20,15 @@ public:
 
     float GetSpin() const { return m_spin; }
     void SetSpin(float spin);
+
+    // Metric type toggle
+    bool IsSchwarzschild() const { return m_metric == BlackHoleMetric::SCHWARZSCHILD || std::abs(m_spin) < 0.0001f; }
+    void SetSchwarzschild(bool isSchwarzschild);
+
+    BlackHoleMetric GetMetric() const { return m_metric; }
+    void SetMetric(BlackHoleMetric metric);
+
+    float GetSavedKerrSpin() const { return m_savedKerrSpin; }
 
     glm::vec3 GetOrigin() const { return m_origin; }
     void SetOrigin(const glm::vec3& origin) { m_origin = origin; }
@@ -52,6 +66,9 @@ private:
     float m_spin; // dimensionless spin parameter a/M (-1 < a < 1)
     glm::vec3 m_origin;
     glm::vec3 m_spinAxis;
+
+    BlackHoleMetric m_metric;
+    float m_savedKerrSpin;
 
     float m_eventHorizonRadius;
     float m_photonSphereRadius;

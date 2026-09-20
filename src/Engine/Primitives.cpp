@@ -2,7 +2,7 @@
 
 
 Circle::Circle(float radius, glm::vec3 origin, unsigned int segments)
-    : Radius(radius), Origin(origin), Segments(segments), Mesh(GL_TRIANGLES)
+    : Mesh(GL_TRIANGLES), Radius(radius), Origin(origin), Segments(segments)
 {
     VertexCount = segments * 3; // Each segment creates a triangle with the center and two points on the circle
     Vertices.resize(VertexCount);
@@ -27,7 +27,7 @@ Circle::~Circle()
 
 
 CircleFan::CircleFan(float radius, glm::vec3 origin, unsigned int segments)
-    : Radius(radius), Origin(origin), Segments(segments), Mesh(GL_TRIANGLE_FAN)
+    : Mesh(GL_TRIANGLE_FAN), Radius(radius), Origin(origin), Segments(segments)
 {
     VertexCount = segments + 2;
     Vertices.resize(VertexCount);
@@ -49,7 +49,7 @@ CircleFan::~CircleFan()
 
 
 LineStrip::LineStrip(glm::vec3 start, glm::vec3 end)
-    : Start(start), End(end), Mesh(GL_LINE_STRIP)
+    : Mesh(GL_LINE_STRIP), Start(start), End(end)
 {
     VertexCount = 2;
     Vertices.resize(VertexCount);
